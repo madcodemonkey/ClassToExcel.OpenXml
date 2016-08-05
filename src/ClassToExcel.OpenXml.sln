@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{1BC4E457-65BF-4FE6-81EE-F14BCDC35A72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassToExcel.Tests", "ClassToExcel.Tests\ClassToExcel.Tests.csproj", "{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{F7DBCBA8-4229-4BC0-8462-EED5623F1ADB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassToExcel.Sample.Data", "ClassToExcel.Sample.Data\ClassToExcel.Sample.Data.csproj", "{E9A6F60C-BB98-438B-ADCE-6305A48C5720}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfExample", "ClassToExcel.Sample.Wpf\WpfExample.csproj", "{9440032C-AE95-4BAC-9764-D5F07711C815}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassToExcel.OpenXml", "ClassToExcel.OpenXml\ClassToExcel.OpenXml.csproj", "{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Debug|x86.Build.0 = Debug|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Release|x86.ActiveCfg = Release|Any CPU
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746}.Release|x86.Build.0 = Release|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Debug|x86.Build.0 = Debug|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Release|x86.ActiveCfg = Release|Any CPU
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720}.Release|x86.Build.0 = Release|Any CPU
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Debug|Any CPU.Build.0 = Debug|x86
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Debug|x86.ActiveCfg = Debug|x86
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Debug|x86.Build.0 = Debug|x86
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Release|Any CPU.ActiveCfg = Release|x86
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Release|x86.ActiveCfg = Release|x86
+		{9440032C-AE95-4BAC-9764-D5F07711C815}.Release|x86.Build.0 = Release|x86
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Debug|x86.Build.0 = Debug|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{06D3B2FF-435F-4B3F-A285-3FA47EDAE746} = {F7DBCBA8-4229-4BC0-8462-EED5623F1ADB}
+		{E9A6F60C-BB98-438B-ADCE-6305A48C5720} = {1BC4E457-65BF-4FE6-81EE-F14BCDC35A72}
+		{9440032C-AE95-4BAC-9764-D5F07711C815} = {1BC4E457-65BF-4FE6-81EE-F14BCDC35A72}
+	EndGlobalSection
+EndGlobal
