@@ -3,6 +3,8 @@ A simple .NET library for reading and writing Excel worksheets using a List<T> a
 
 Notes
 * Since these reading and writing classes are performing operations in memory, I do NOT recommend using this code to produce large Excel files with lots of rows.
+* Requires the use of Microsoft's OpenXML library:  DocumentFormat.OpenXML
+
 
 # Step 1: Create instructions
 Create a class that will hold your data.
@@ -79,6 +81,9 @@ Here is a list of built in style format supported by Excel:
 * ##0.0E+0
 * @
 
+Other examples that work with Excel
+* mm/dd/yy
+* _($* #,##0.00_);_($* (#,##0.00);_($* "" - ""??_);_(@_)   
 
 
 # Step 3a: Write instructions
