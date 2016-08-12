@@ -5,7 +5,6 @@ Notes
 * Since these reading and writing classes are performing operations in memory, I do NOT recommend using this code to produce large Excel files with lots of rows.
 * Requires the use of Microsoft's OpenXML library:  DocumentFormat.OpenXML
 
-
 # Step 1: Create instructions
 Create a class that will hold your data.
 
@@ -125,7 +124,7 @@ Disposing of the writer will clean up OpenXML SpreadsheetDocument and other obje
 
 
 # Step 3b: Read instructions
-Create an ClassToExcelReaderService object specifying the class that will be used.  Call ReadWorksheet with an 
+Create a ClassToExcelReaderService object specifying the class that will be used.  Call ReadWorksheet with an 
 input (file path, stream or byte array), the name of the tab/worksheet, and specify if the first row is a header row 
 (warning, if you say "no" the Order attribute will be used to find data if order is not specified on the class
 alphabetical order by ColumnName \[property name if ColumnName not specified\] will be assumed and data may be mapped incorrectly).
@@ -149,7 +148,7 @@ Create an ClassToExcelRawReaderService object.  Call ReadWorksheet with an input
 
 ```c#
 // File example
-// Passing in LogServiceMessage in optional.  I'm using it here to help debug in issues while reading a file.
+// Passing in LogServiceMessage is optional.  I'm using it here to help debug any issues while reading a file.
 var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
 List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet("c:\\temp\\Example1.xlsx", "People");
 if (rawRows.Count > 0)
