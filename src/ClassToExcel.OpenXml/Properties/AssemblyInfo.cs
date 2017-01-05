@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ClassToExcel.OpenXml")]
-[assembly: AssemblyDescription("A simple library for reading and writing Excel spreadsheets using Dot Net List of T as the input or received output of the operation.")]
+[assembly: AssemblyDescription("A simple library for writing and reading Excel spreadsheets using Dot Net List of T as the input or received output of the operation.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("David Yates")]
 [assembly: AssemblyProduct("ClassToExcel.OpenXml")]

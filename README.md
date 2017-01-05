@@ -1,5 +1,5 @@
 # ClassToExcel
-A simple .NET library for reading and writing Excel worksheets using a List<T> as the input or received output of the operation.
+A simple .NET library for writing and reading Excel worksheets using a List of T as the input or received output of the operation.
 
 Notes
 * Since these reading and writing classes are performing operations in memory, I do NOT recommend using this code to produce large Excel files with lots of rows.
