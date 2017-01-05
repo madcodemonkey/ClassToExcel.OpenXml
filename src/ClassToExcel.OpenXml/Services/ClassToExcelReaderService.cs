@@ -211,13 +211,16 @@ namespace ClassToExcel
             if (string.IsNullOrWhiteSpace(stringValue) == false)
             {
                 decimal number;
-                if (decimal.TryParse(stringValue, out number))
+                // NumberStyles.Float used to allow parse to deal with exponents
+                if (decimal.TryParse(stringValue, NumberStyles.Float, null, out number))
                 {
                     column.Property.SetValue(newItem, number, null);
                 }
                 else
                 {
                     string convertSpecialStrings = ConvertSpecialStrings(stringValue);
+                    // Avoid a recursive loop by comparing what was passed in to what the ConvertSpecialStrings
+                    // method returns. If they are the same, we need to exit and log an error!
                     if (string.CompareOrdinal(convertSpecialStrings, stringValue) == 0)
                     {
                         LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
@@ -233,13 +236,16 @@ namespace ClassToExcel
             if (string.IsNullOrWhiteSpace(stringValue) == false)
             {
                 double number;
-                if (double.TryParse(stringValue, out number))
+                // NumberStyles.Float used to allow parse to deal with exponents
+                if (double.TryParse(stringValue, NumberStyles.Float, null, out number))
                 {
                     column.Property.SetValue(newItem, number, null);
                 }
                 else
                 {
                     string convertSpecialStrings = ConvertSpecialStrings(stringValue);
+                    // Avoid a recursive loop by comparing what was passed in to what the ConvertSpecialStrings
+                    // method returns. If they are the same, we need to exit and log an error!
                     if (string.CompareOrdinal(convertSpecialStrings, stringValue) == 0)
                     {
                         LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
@@ -269,20 +275,11 @@ namespace ClassToExcel
 
         private string ConvertSpecialStrings(string stringValue)
         {
-            if (stringValue.Contains("E-"))
-            {
-                double number;
-                if (double.TryParse(stringValue, NumberStyles.Float, null, out number) == false)
-                    return stringValue;
-
-                return number.ToString(CultureInfo.InvariantCulture);
-            }
-
             if (stringValue.Contains("%"))
             {
-                string replace = stringValue.Remove('%');
+                string stringWithoutPercentageSign = stringValue.Replace("%", "");
                 double number;
-                if (double.TryParse(replace, out number) == false)
+                if (double.TryParse(stringWithoutPercentageSign, out number) == false)
                     return stringValue;
 
                 number = number / 100.0;

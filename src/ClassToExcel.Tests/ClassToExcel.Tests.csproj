@@ -61,6 +61,7 @@
     <Compile Include="PersonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveAndReadHelper.cs" />
+    <Compile Include="NumberTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassToExcel.OpenXml\ClassToExcel.OpenXml.csproj">
