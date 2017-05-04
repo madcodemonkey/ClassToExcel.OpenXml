@@ -54,6 +54,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BasicReadAndWriteTests.cs" />
+    <Compile Include="ChickenHelper.cs" />
     <Compile Include="ColumnNameTests.cs" />
     <Compile Include="IsOptionalTests.cs" />
     <Compile Include="OrderTests.cs" />

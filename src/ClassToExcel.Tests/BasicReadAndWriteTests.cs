@@ -8,7 +8,7 @@ namespace ClassToExcel.Tests
     public class BasicReadAndWriteTests
     {
         [TestMethod]
-        public void CanReadAndWriteRandomDataWithHeaders()
+        public void CanReadAndWriteRandomPersonDataWithHeaders()
         {
             const bool hasHeaderRow = true;
 
@@ -24,7 +24,23 @@ namespace ClassToExcel.Tests
         }
 
         [TestMethod]
-        public void CanReadAndWriteRandomDataWithNoHeaders()
+        public void CanReadAndWriteRandomChickenDataWithHeaders()
+        {
+            const bool hasHeaderRow = true;
+
+            // Arrange
+            List<Chicken> expectedList = ChickenCreator.Work(20);
+
+            // Act
+            var saveAndReadHelper = new SaveAndReadHelper<Chicken, Chicken>();
+            var actualList = saveAndReadHelper.SaveAndRead(expectedList, hasHeaderRow);
+
+            // Assert
+            ChickenHelper.CompareExpectedWithActualAndAssertIfNotEqual(expectedList, actualList);
+        }
+
+        [TestMethod]
+        public void CanReadAndWriteRandomPersonDataWithNoHeaders()
         {
             const bool hasHeaderRow = false;
 
@@ -37,6 +53,22 @@ namespace ClassToExcel.Tests
 
             // Assert
             PersonHelper.CompareExpectedWithActualAndAssertIfNotEqual(expectedList, actualList);
+        }
+
+        [TestMethod]
+        public void CanReadAndWriteRandomChickenDataWithNoHeaders()
+        {
+            const bool hasHeaderRow = false;
+
+            // Arrange
+            List<Chicken> expectedList = ChickenCreator.Work(20);
+
+            // Act
+            var saveAndReadHelper = new SaveAndReadHelper<Chicken, Chicken>();
+            var actualList = saveAndReadHelper.SaveAndRead(expectedList, hasHeaderRow);
+
+            // Assert
+            ChickenHelper.CompareExpectedWithActualAndAssertIfNotEqual(expectedList, actualList);
         }
     }
 }

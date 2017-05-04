@@ -197,14 +197,34 @@ namespace ClassToExcel
                                 CellValue = new CellValue(valueAsDate.ToOADate().ToString(CultureInfo.InvariantCulture))
                             };
                         }
-                        else if (dataColumn.IsNumber)
+                        else if (dataColumn.IsDouble)
                         {
                             newCell = new Cell
                             {
                                 CellReference = String.Format("{0}{1}", dataColumn.ExcelColumnLetter, rowIndex),
                                 DataType = CellValues.Number,
                                 StyleIndex = dataColumn.StyleIndex,
-                                CellValue = new CellValue(value.ToString())
+                                CellValue = new CellValue(DoubleValue.FromDouble((double) value)) // nulls can't make it here
+                            };
+                        }
+                        else if (dataColumn.IsDecimal)
+                        {
+                            newCell = new Cell
+                            {
+                                CellReference = String.Format("{0}{1}", dataColumn.ExcelColumnLetter, rowIndex),
+                                DataType = CellValues.Number,
+                                StyleIndex = dataColumn.StyleIndex,
+                                CellValue = new CellValue(DecimalValue.FromDecimal((decimal)value)) // nulls can't make it here
+                            };
+                        }
+                        else if (dataColumn.IsInteger)
+                        {
+                            newCell = new Cell
+                            {
+                                CellReference = String.Format("{0}{1}", dataColumn.ExcelColumnLetter, rowIndex),
+                                DataType = CellValues.Number,
+                                StyleIndex = dataColumn.StyleIndex,
+                                CellValue = new CellValue(IntegerValue.FromInt64((int)value)) // nulls can't make it here
                             };
                         }
                         else if (dataColumn.IsBoolean)
@@ -214,7 +234,7 @@ namespace ClassToExcel
                                 CellReference = String.Format("{0}{1}", dataColumn.ExcelColumnLetter, rowIndex),
                                 DataType = CellValues.Boolean,
                                 StyleIndex = dataColumn.StyleIndex,
-                                CellValue = new CellValue(value.ToString())
+                                CellValue = new CellValue(BooleanValue.FromBoolean((bool) value))
                             };
                         }
                         else

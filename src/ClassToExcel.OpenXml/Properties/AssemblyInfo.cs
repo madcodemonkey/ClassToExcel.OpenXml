@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ClassToExcel.OpenXml")]
-[assembly: AssemblyDescription("A simple library for writing and reading Excel spreadsheets using Dot Net List of T as the input or received output of the operation.")]
+[assembly: AssemblyDescription("A simple library for writing and reading Excel spreadsheets using a Dot Net List of T as the input or received output of the operation.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("David Yates")]
 [assembly: AssemblyProduct("ClassToExcel.OpenXml")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.3")]
-[assembly: AssemblyFileVersion("1.0.0.3")]
+[assembly: AssemblyVersion("1.0.0.4")]
+[assembly: AssemblyFileVersion("1.0.0.4")]

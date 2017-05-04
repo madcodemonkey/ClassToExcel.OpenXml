@@ -40,7 +40,7 @@
             <Button Name="SaveButton" Content="Save Log" MinHeight="25" Margin="5" MinWidth="75" Click="SaveButton_Click" />
             <Button Name="DoRawReadWorkButton" Content="RAW Read file" MinHeight="25" Margin="5" MinWidth="75" Click="DoRawReadWorkButton_Click" />
             <Button Name="DoReadWorkButton" Content="Read file" MinHeight="25" Margin="5" MinWidth="75" Click="DoReadWorkButton_Click" />
-            <Button Name="DoWriteWorkButton" Content="Write file" MinHeight="25" Margin="5" MinWidth="75" Click="DoWriteWorkButton_Click" />
+            <Button Name="DoWriteWorkButton" Content="Create file" MinHeight="25" Margin="5" MinWidth="75" Click="DoWriteWorkButton_Click" />
         </StackPanel>
 
     </Grid>

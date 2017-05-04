@@ -112,10 +112,12 @@ namespace ClassToExcel
                         // Is it a number, date or boolean?
                         if (property.PropertyType != typeof(string))
                         {
-                            if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?)
-                                || property.PropertyType == typeof(double) || property.PropertyType == typeof(double?)
-                                || property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
-                                newData.IsNumber = true;
+                            if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                                newData.IsInteger = true;
+                            else if (property.PropertyType == typeof(double) || property.PropertyType == typeof(double?))
+                                newData.IsDouble = true;
+                            else if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
+                                newData.IsDecimal = true;
                             else if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                                 newData.IsDate = true;
                             else if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
@@ -123,7 +125,7 @@ namespace ClassToExcel
                         }
                         
                         // Any special styling?
-                        if (string.IsNullOrWhiteSpace(displayAttribute.StyleFormat) == false && (newData.IsNumber || newData.IsDate))
+                        if (string.IsNullOrWhiteSpace(displayAttribute.StyleFormat) == false && (newData.IsNumber() || newData.IsDate))
                         {
                             newData.StyleFormat = displayAttribute.StyleFormat.Trim();
                         }
