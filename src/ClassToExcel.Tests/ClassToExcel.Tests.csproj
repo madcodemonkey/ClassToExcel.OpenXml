@@ -53,16 +53,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BasicReadAndWriteTests.cs" />
-    <Compile Include="ChickenHelper.cs" />
-    <Compile Include="ColumnNameTests.cs" />
-    <Compile Include="IsOptionalTests.cs" />
-    <Compile Include="OrderTests.cs" />
-    <Compile Include="IgnoreTests.cs" />
-    <Compile Include="PersonHelper.cs" />
+    <Compile Include="Common\BasicReadAndWriteTests.cs" />
+    <Compile Include="Converters\ClassToExcelRowConverterTests.cs" />
+    <Compile Include="Converters\StringToPropertyConverterTests.cs" />
+    <Compile Include="TestingHelpers\ChickenHelper.cs" />
+    <Compile Include="Common\ColumnNameTests.cs" />
+    <Compile Include="Common\IsOptionalTests.cs" />
+    <Compile Include="Common\OrderTests.cs" />
+    <Compile Include="Common\IgnoreTests.cs" />
+    <Compile Include="TestingHelpers\PersonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveAndReadHelper.cs" />
-    <Compile Include="NumberTests.cs" />
+    <Compile Include="TestingHelpers\SaveAndReadHelper.cs" />
+    <Compile Include="Common\NumberTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassToExcel.OpenXml\ClassToExcel.OpenXml.csproj">

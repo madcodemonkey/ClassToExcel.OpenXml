@@ -5,10 +5,17 @@ Notes
 * Since these reading and writing classes are performing operations in memory, I do NOT recommend using this code to produce large Excel files with lots of rows.
 * Requires the use of Microsoft's OpenXML library:  DocumentFormat.OpenXML
 
-# Step 1: Create instructions
+---
+---
+# ClassToExcelWriterService and ClassToExcelReaderService
+The ClassToExcelWriterService service can be used to turn a List<T> into an Excel spreadsheet where each class represents a row and certain properties on the class are mapped to columns in the Excel spreadsheet. The ClassToExcelReaderService service can be used to do the reverse action.  It takes each row in the Excel spreadsheet and maps the columnd to properties on a class which results in a List<T>.
+
+---
+## Step 1: Create instructions
 Create a class that will hold your data.
 
-# Step 2: Decorate instructions
+---
+## Step 2: Decorate instructions
 Decorate the properties with the ClassToExcelAttribute. The ClassToExcelAttribute has the following properties:
 * ColumnName - This is used when reading or writing files where a header row is present.
 * Order - I highly recommend specifying the Order.  When writing, it specifies the order that the column is
@@ -84,8 +91,8 @@ Other examples that work with Excel
 * mm/dd/yy
 * _($* #,##0.00_);_($* (#,##0.00);_($* "" - ""??_);_(@_)   
 
-
-# Step 3a: Write instructions
+---
+## Step 3a: Write instructions
 Create a ClassToExcelWriterService object, add your worksheet data (list of instantiated objects from step 1) 
 and then save it as a file or request the data in a MemoryStream.
 ```c#
@@ -122,8 +129,8 @@ Notes
 Disposing of the writer will clean up OpenXML SpreadsheetDocument and other objects. 
 * Objects and arrays will NOT be written to the file.
 
-
-# Step 3b: Read instructions
+---
+## Step 3b: Read instructions
 Create a ClassToExcelReaderService object specifying the class that will be used.  Call ReadWorksheet with an 
 input (file path, stream or byte array), the name of the tab/worksheet, and specify if the first row is a header row 
 (warning, if you say "no" the Order attribute will be used to find data if order is not specified on the class
@@ -141,13 +148,14 @@ Notes
 * Objects and Arrays will be IGNORED on the class you created in Step 1.
 * This code uses reflection, so it can set a value on a private setter in the class you created in Step 1.
 
+---
+---
+# Optional: ClassToExcelRawReaderService (Raw Read instructions)
+The ClassToExcelRawReaderService service is used for doing a raw dump of an Excel spreadsheet where every column's data is expressed as a string.
 
-# Step 3c: Raw Read instructions
-Create an ClassToExcelRawReaderService object.  Call ReadWorksheet with an input 
-(file path, stream or byte array) and the name of the tab/worksheet.
+First, create an ClassToExcelRawReaderService object and then call the ReadWorksheet method with an input (file path, stream or byte array) and the name of the tab/worksheet.
 
 ```c#
-// File example
 // Passing in LogServiceMessage is optional.  I'm using it here to help debug any issues while reading a file.
 var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
 List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet("c:\\temp\\Example1.xlsx", "People");
@@ -171,4 +179,87 @@ Notes
 * The ClassToExcelRawReaderService service returns a list of row objects and each row object contains a list of column objects.  
 The column object contains the column letter and the data in the column represented as a RAW (unparsed) string.  
 In other words, things like dates will come out as numbers, which is how they are represented behind the scene.  
+* If you need to convert dates from this number format into a real date, you can use  DateTime.FromOADate(someNumber) to convert it.
 * ClassToExcelWriterService is disposable, but the ClassToExcelRawReaderService is not.
+
+
+---
+---
+# Optional: ClassToExcelRowConverter
+This coverter can be used in conjunction with the ClassToExcelRawReaderService and the ClassToExcelRowAttribute to map several rows onto a single class.  I don't expect this to be used very often, but there are a few edge cases where I needed to do somethhing like read rows 1 - 4 to one class and 5 - 8 to another.
+
+## Step 1 
+Run the example and do a Raw read to see how the data is going to look and take note that blank lines are eliminated by the OpenXML framework.
+```
+Row: 1 --> [Column: A Data: Beverages][Column: B Data: Column1][Column: C Data: Quantity]
+Row: 2 --> [Column: A Data: Beer][Column: C Data: 1]
+Row: 3 --> [Column: A Data: Wine][Column: C Data: 2]
+Row: 4 --> [Column: A Data: Pepsi][Column: C Data: 3]
+Row: 5 --> [Column: A Data: Coke][Column: C Data: 4]
+Row: 6 --> [Column: A Data: Dr. Pepper][Column: C Data: 5]
+Row: 7 --> [Column: A Data: Dates][Column: B Data: Start Date][Column: C Data: End Date]
+Row: 8 --> [Column: A Data: Beer availability date][Column: B Data: 41883][Column: C Data: 41896]
+Row: 9 --> [Column: A Data: Wine availability date][Column: B Data: 42798][Column: C Data: 42827]
+```
+
+## Step 2
+Create your classes and decorate it with them ClassToExcelRowAttribute.
+
+```c#
+// Row 1 is a header
+public class Beverage
+{
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 2)]
+	public int Beer { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 3)]
+	public int Wine { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 4)]
+	public int Pepsi { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 5)]
+	public int Coke { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 6)]
+	public int DrPepper { get; set; }
+}
+
+// Row 7 is a header and the blank row between the data is eliminated by OpenXML framework.
+public class BeverageDates
+{
+	[ClassToExcelRow(ColumnLetter = "B", RowNumber = 8)]
+	public DateTime BeerStart { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 8)]
+	public DateTime BeerEnd { get; set; }
+
+	[ClassToExcelRow(ColumnLetter = "B", RowNumber = 9)]
+	public DateTime WineStart { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 9)]
+	public DateTime WineEnd { get; set; }
+}
+```
+
+## Step 3
+```c#
+string filePath = "C:\\Temp\\Beverages.xlsx";
+if (File.Exists(filePath))
+{
+	var worksheetName = "Test";
+
+	// Passing in LogServiceMessage in optional.  I'm using it here to help debug in issues while reading a file.
+	var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
+	List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet(filePath, worksheetName);
+	if (rawRows.Count > 0)
+	{
+		// Rows 2-6 (Column C) have the Beverage class data
+		var converter1 = new ClassToExcelRowConverter<Beverage>(LogServiceMessage);
+		Beverage beverage = converter1.Convert(rawRows);
+		Console.WriteLine(SerializationHelper.SerializeToXml(beverage));
+
+		// Rows 8-9 (Columns B & C) have the BeverageDates class data
+		var converter2 = new ClassToExcelRowConverter<BeverageDates>(LogServiceMessage);
+		BeverageDates dates = converter2.Convert(rawRows);
+		Console.WriteLine(SerializationHelper.SerializeToXml(dates));
+
+	}
+	else Console.WriteLine("No data found.");
+ }
+ else Console.WriteLine($"The file does not exists: {filePath}");	
+ ```

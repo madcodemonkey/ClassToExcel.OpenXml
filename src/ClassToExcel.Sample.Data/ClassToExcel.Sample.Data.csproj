@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Beverages\Beverage.cs" />
+    <Compile Include="Beverages\BeverageDates.cs" />
     <Compile Include="Chickens\Chicken.cs" />
     <Compile Include="Chickens\ChickenCreator.cs" />
     <Compile Include="People\Person.cs" />
@@ -52,6 +54,11 @@
       <Project>{2A1D9261-6652-444E-A7AB-628BE5CD4D4A}</Project>
       <Name>ClassToExcel.OpenXml</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Beverages.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,16 +12,29 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontFamily" Value="Arial"/>
         </Style>
+        <BooleanToVisibilityConverter x:Key="B2V" />
     </Window.Resources>
-
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="33*" />
+                <ColumnDefinition Width="33*" />
+                <ColumnDefinition Width="33*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Operation Type"></Label>
+            <RadioButton Grid.Column="2" Margin="0,6,0,0" Name="ActionsChickenPeople" GroupName="OperationType" Content="People/Chicken Example" IsChecked="True" />
+            <RadioButton  Grid.Column="1" Margin="0,6,0,0" Name="ActionsRaw"  GroupName="OperationType" Content="Raw reading example" />
+        </Grid>
+
+        <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -29,18 +42,35 @@
             </Grid.ColumnDefinitions>
             <Label Content="File" Grid.Column="0" Height="28" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" />
             <TextBox Name="FilePath"  Grid.Column="1" Height="23" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Stretch" Text="C:\Temp\PeopleAndBirds.xlsx"  />
-            <Button  Name="findFile" Grid.Column="2" Content="..." MinWidth="30" Click="FindFile_Click" />
+            <Button  Name="FindFile" Grid.Column="2" Content="..." MinWidth="30" Click="FindFile_Click" />
+        </Grid>
+        <Grid Grid.Row="2"  Visibility="{Binding IsChecked,ElementName=ActionsRaw,Converter={StaticResource B2V}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Raw read tab Names (comma delimited)" Grid.Column="0" Height="28" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" />
+            <TextBox Name="WorksheetNames"  Grid.Column="1" Height="23" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Stretch" Text="Test,People,Chickens" />
         </Grid>
 
-        <RichTextBox Name="RtbLog" Grid.Row="1" Style="{StaticResource RichTextWithBetterSpacing}" 
+        <RichTextBox Name="RtbLog" Grid.Row="3" Style="{StaticResource RichTextWithBetterSpacing}" 
                      HorizontalAlignment="Stretch" Margin="0, 5, 5, 0"  VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="ClearButton" Content="Clear Log" MinHeight="25" Margin="5" MinWidth="75" Click="ClearButton_Click" />
             <Button Name="SaveButton" Content="Save Log" MinHeight="25" Margin="5" MinWidth="75" Click="SaveButton_Click" />
-            <Button Name="DoRawReadWorkButton" Content="RAW Read file" MinHeight="25" Margin="5" MinWidth="75" Click="DoRawReadWorkButton_Click" />
-            <Button Name="DoReadWorkButton" Content="Read file" MinHeight="25" Margin="5" MinWidth="75" Click="DoReadWorkButton_Click" />
-            <Button Name="DoWriteWorkButton" Content="Create file" MinHeight="25" Margin="5" MinWidth="75" Click="DoWriteWorkButton_Click" />
+            <Button Name="DoVerticalReadWorkButton" Content="Map rows to properties using Beverages.xlsx example file" 
+                    Visibility="{Binding IsChecked,ElementName=ActionsRaw,Converter={StaticResource B2V}}"
+                    MinHeight="25" Margin="5" MinWidth="75" Click="DoMapRowsToPropertiesWorkButton_Click" />
+            <Button Name="DoRawReadWorkButton" Content="RAW Read file from specified file" MinHeight="25" Margin="5" MinWidth="75"
+                    Visibility="{Binding IsChecked,ElementName=ActionsRaw,Converter={StaticResource B2V}}"
+                    Click="DoRawReadWorkButton_Click" />
+            <Button Name="DoReadWorkButton" Content="Read PeopleAndBirds.xslx file" MinHeight="25" Margin="5" MinWidth="75"
+                    Visibility="{Binding IsChecked,ElementName=ActionsChickenPeople,Converter={StaticResource B2V}}"
+                    Click="DoReadWorkButton_Click" />
+            <Button Name="DoWriteWorkButton" Content="Create PeopleAndBirds.xslx file" MinHeight="25" Margin="5" MinWidth="75" 
+                    Visibility="{Binding IsChecked,ElementName=ActionsChickenPeople,Converter={StaticResource B2V}}"
+                    Click="DoCreateTestFileButton_Click" />
         </StackPanel>
 
     </Grid>

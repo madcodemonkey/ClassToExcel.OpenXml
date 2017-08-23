@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Documents;
@@ -27,9 +29,12 @@ namespace WpfExample
                 string filePath = FilePath.Text;
                 if (File.Exists(filePath))
                 {
+                    LogMessage($"Loading data from {filePath}");
+
                     // Passing in LogServiceMessage in optional.  I'm using it here to help debug in issues while reading a file.
                     var readerService = new ClassToExcelReaderService<Person>(LogServiceMessage);
-                    List<Person> people = readerService.ReadWorksheet(filePath, "People", true);
+                    var worksheetName = "People";
+                    List<Person> people = readerService.ReadWorksheet(filePath, worksheetName, true);
                     if (people.Count > 0)
                     {
                         foreach (var person in people)
@@ -37,7 +42,7 @@ namespace WpfExample
                             LogMessage(person.ToString());
                         }
                     }
-                    else LogMessage("No data found.");
+                    else LogMessage($"No data found on the {worksheetName} work sheet!");
                 }
                 else LogMessage("The file does not exists: " + filePath);
             }
@@ -48,7 +53,7 @@ namespace WpfExample
         }
         
 
-        private void DoWriteWorkButton_Click(object sender, RoutedEventArgs e)
+        private void DoCreateTestFileButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -84,35 +89,111 @@ namespace WpfExample
         {
             try
             {
+                LogMessage("I'm using RAW read service (ClassToExcelRawReaderService) to get data and then dumping it directly out in the log.");
+                LogMessage("Note that blank rows are skipped by OpenXml.");
+
                 string filePath = FilePath.Text;
                 if (File.Exists(filePath))
                 {
+                    LogMessage($"Loading data from {filePath}");
+
                     // Passing in LogServiceMessage in optional.  I'm using it here to help debug in issues while reading a file.
                     var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
-                    List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet(filePath, "People");
-                    if (rawRows.Count > 0)
+
+                    // Get tab names
+                    List<string> worksheetNames = string.IsNullOrWhiteSpace(WorksheetNames.Text)
+                        ? new List<string>()
+                        : WorksheetNames.Text.Split(',').ToList();
+
+                    if (worksheetNames.Count > 0)
                     {
-                        
-                        foreach (var row in rawRows)
+                        foreach (string worksheetName in worksheetNames)
                         {
-                            StringBuilder sb = new StringBuilder();
-                            sb.AppendFormat("Row: {0} --> ", row.RowIndex);
-                            foreach (var column in row.Columns)
+                            List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet(filePath, worksheetName.Trim());
+                            if (rawRows.Count > 0)
                             {
-                                sb.AppendFormat("[Column: {0} Data: {1}]", column.ColumnLetter, column.Data);
+                                LogMessage($"Work sheet name: {worksheetName}");
+
+                                foreach (var row in rawRows)
+                                {
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.AppendFormat("Row: {0} --> ", row.RowNumber);
+                                    foreach (var column in row.Columns)
+                                    {
+                                        sb.AppendFormat("[Column: {0} Data: {1}]", column.ColumnLetter, column.Data);
+                                    }
+                                    LogMessage(sb.ToString());
+                                }
                             }
-                            LogMessage(sb.ToString());
+                            else LogMessage($"No data found on work sheet named: {worksheetName}");
+
+                            LogMessage("----------------------------------");
                         }
                     }
-                    else LogMessage("No data found.");
+                    else LogMessage("No work sheet (tab) names specified.");
                 }
-                else LogMessage("The file does not exists: " + filePath);
+                else LogMessage($"The file does not exists: {filePath}");
             }
             catch (Exception ex)
             {
                 LogError(ex);
             }
         }
+
+        private void DoMapRowsToPropertiesWorkButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                LogMessage("I'm using RAW read service (ClassToExcelRawReaderService) to get data and then " +
+                    "I'm using a converter (ClassToExcelRowConverter) to map rows to a class' properties.");
+                LogMessage("Note that blank rows are skipped by OpenXml.");
+
+                // Load the embedded Beverages.xlsx file.
+                String someDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string filePath = Path.Combine(someDirectory, "Beverages.xlsx");
+                if (File.Exists(filePath))
+                {
+                    LogMessage($"Loading data from {filePath}");
+                    // Get tab names
+                    List<string> worksheetNames = string.IsNullOrWhiteSpace(WorksheetNames.Text)
+                        ? new List<string>()
+                        : WorksheetNames.Text.Split(',').ToList();
+
+                    if (worksheetNames.Count > 0)
+                    {
+                        var worksheetName = worksheetNames.First().Trim();
+
+                        // Passing in LogServiceMessage in optional.  I'm using it here to help debug in issues while reading a file.
+                        var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
+                        List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet(filePath, worksheetName);
+                        if (rawRows.Count > 0)
+                        {
+                            // Rows 2-6 (Column C) have the Beverage class data
+                            var converter1 = new ClassToExcelRowConverter<Beverage>(LogServiceMessage);
+                            Beverage beverage = converter1.Convert(rawRows);
+                            LogMessage(SerializationHelper.SerializeToXml(beverage));
+
+                            // Rows 8-9 (Columns B & C) have the BeverageDates class data
+                            var converter2 = new ClassToExcelRowConverter<BeverageDates>(LogServiceMessage);
+                            BeverageDates dates = converter2.Convert(rawRows);
+                            LogMessage(SerializationHelper.SerializeToXml(dates));
+
+                        }
+                        else LogMessage("No data found.");
+
+
+                    }
+                    else LogMessage("No work sheet (tab) names specified");
+                }
+                else LogMessage($"The file does not exists: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+            }
+        }
+
+
 
         private void FindFile_Click(object sender, RoutedEventArgs e)
         {

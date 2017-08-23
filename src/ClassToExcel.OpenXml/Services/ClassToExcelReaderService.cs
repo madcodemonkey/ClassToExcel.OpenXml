@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
@@ -8,10 +7,12 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace ClassToExcel
 {
-    /// <summary>Reads only primitives and maps them ont a given class type.</summary>
+    /// <summary>Reads only primitives and maps them ont a given class type.  Assumes that columns map to properties.</summary>
     /// <typeparam name="T"></typeparam>
     public class ClassToExcelReaderService<T> : ClassToExcelBaseService, IClassToExcelReaderService<T> where T : class, new()
     {
+        private readonly StringToPropertyConverter<T> _stringToPropertyConverter = new StringToPropertyConverter<T>();
+
         public ClassToExcelReaderService() : base(null) { }
         public ClassToExcelReaderService(Action<ClassToExcelMessage> loggingCallback) : base(loggingCallback){}
 
@@ -74,7 +75,7 @@ namespace ClassToExcel
                 throw new ArgumentException("You must specify a worksheet name!");
 
             List<ClassToExcelColumn> columns = CreateColumns(worksheetName, typeof(T));
-            
+
             //Open the Excel file
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(dataStream, false))
             {
@@ -145,149 +146,12 @@ namespace ClassToExcel
             if (string.IsNullOrEmpty(stringValue))
                 return;
 
-            if (column.Property.PropertyType == typeof(string))
-                column.Property.SetValue(newItem, stringValue, null);
-            else if (column.Property.PropertyType == typeof(DateTime) || column.Property.PropertyType == typeof(DateTime?))
-                AssignDateTimeValue(newItem, column, rowIndex, stringValue);
-            else
+            var resultType = _stringToPropertyConverter.AssignValue(column.Property, newItem, stringValue);
+            if (resultType == StringToPropertyConverterEnum.Error || resultType == StringToPropertyConverterEnum.Warning)
             {
-                if (column.Property.PropertyType == typeof(int) || column.Property.PropertyType == typeof(int?))
-                    AssignIntValue(newItem, column, rowIndex, stringValue);
-                else if (column.Property.PropertyType == typeof(double) || column.Property.PropertyType == typeof(double?))
-                    AssignDoubleValue(newItem, column, rowIndex, stringValue);
-                else if (column.Property.PropertyType == typeof(decimal) || column.Property.PropertyType == typeof(decimal?))
-                    AssignDecimalValue(newItem, column, rowIndex, stringValue);
-                else if (column.Property.PropertyType == typeof(bool) || column.Property.PropertyType == typeof(bool?))
-                    AssignBoolValue(newItem, column, rowIndex, stringValue);
-                else LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.TypeNotSupportedProblem, rowIndex, column, 
-                    string.Format("Unknown property type '{0}' seen in AssignValue", column.Property.PropertyType)));
+                var classToExcelMessageType = resultType == StringToPropertyConverterEnum.Error ? ClassToExcelMessageType.Error : ClassToExcelMessageType.Warning;
+                LogMessage(new ClassToExcelMessage(classToExcelMessageType, rowIndex, column, _stringToPropertyConverter.LastMessage));
             }
-        }
-
-        private void AssignBoolValue(T newItem, ClassToExcelColumn column, int rowIndex, string stringValue)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue) == false)
-            {
-                bool booleanValue;
-                if (bool.TryParse(stringValue, out booleanValue))
-                {
-                    column.Property.SetValue(newItem, booleanValue, null);
-                }
-                else
-                {
-                    var lower = stringValue.Trim().ToLower();
-                    if (lower == "y" || lower == "true" || lower == "t" || lower == "1")
-                        column.Property.SetValue(newItem, true, null);
-                    else
-                    {
-                        LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
-                            rowIndex, column, string.Format("Assuming '{0}' is false since parsing failed.", stringValue)));
-                        column.Property.SetValue(newItem, false, null);
-                    }
-                }
-            }
-        }
-
-        private void AssignDateTimeValue(T newItem, ClassToExcelColumn column, int rowIndex, string stringValue)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue) == false)
-            {
-                double value;
-                if (double.TryParse(stringValue, out value))
-                {
-                    DateTime fromOaDate = DateTime.FromOADate(value);
-                    column.Property.SetValue(newItem, fromOaDate, null);
-                }
-                else
-                {
-                    LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
-                        rowIndex, column, string.Format("Could not parse '{0}' as an DateTime!", stringValue)));
-                }
-            }
-        }
-
-        private void AssignDecimalValue(T newItem, ClassToExcelColumn column, int rowIndex, string stringValue)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue) == false)
-            {
-                decimal number;
-                // NumberStyles.Float used to allow parse to deal with exponents
-                if (decimal.TryParse(stringValue, NumberStyles.Float, null, out number))
-                {
-                    column.Property.SetValue(newItem, number, null);
-                }
-                else
-                {
-                    string convertSpecialStrings = ConvertSpecialStrings(stringValue);
-                    // Avoid a recursive loop by comparing what was passed in to what the ConvertSpecialStrings
-                    // method returns. If they are the same, we need to exit and log an error!
-                    if (string.CompareOrdinal(convertSpecialStrings, stringValue) == 0)
-                    {
-                        LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
-                            rowIndex, column, string.Format("Could not parse '{0}' as a decimal!", stringValue)));
-                    }
-                    else AssignDecimalValue(newItem, column, rowIndex, convertSpecialStrings);
-                }
-            }
-        }
-
-        private void AssignDoubleValue(T newItem, ClassToExcelColumn column, int rowIndex, string stringValue)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue) == false)
-            {
-                double number;
-                // NumberStyles.Float used to allow parse to deal with exponents
-                if (double.TryParse(stringValue, NumberStyles.Float, null, out number))
-                {
-                    column.Property.SetValue(newItem, number, null);
-                }
-                else
-                {
-                    string convertSpecialStrings = ConvertSpecialStrings(stringValue);
-                    // Avoid a recursive loop by comparing what was passed in to what the ConvertSpecialStrings
-                    // method returns. If they are the same, we need to exit and log an error!
-                    if (string.CompareOrdinal(convertSpecialStrings, stringValue) == 0)
-                    {
-                        LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
-                            rowIndex, column, string.Format("Could not parse '{0}' as a double!", stringValue)));
-                    }
-                    else AssignDoubleValue(newItem, column, rowIndex, convertSpecialStrings);
-                }
-            }
-        }
-
-        private void AssignIntValue(T newItem, ClassToExcelColumn column, int rowIndex, string stringValue)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue) == false)
-            {
-                int number;
-                if (int.TryParse(stringValue, out number))
-                {
-                    column.Property.SetValue(newItem, number, null);
-                }
-                else
-                {
-                    LogMessage(new ClassToExcelMessage(ClassToExcelMessageType.ParseProblem, 
-                        rowIndex, column, string.Format("Could not parse '{0}' as an int!", stringValue)));
-                }
-            }
-        }
-
-        private string ConvertSpecialStrings(string stringValue)
-        {
-            if (stringValue.Contains("%"))
-            {
-                string stringWithoutPercentageSign = stringValue.Replace("%", "");
-                double number;
-                if (double.TryParse(stringWithoutPercentageSign, out number) == false)
-                    return stringValue;
-
-                number = number / 100.0;
-
-                return number.ToString(CultureInfo.InvariantCulture);
-            }
-
-            return stringValue;
         }
 
         /// <summary>If the user has specified that there is a header row, remap the class properties based 

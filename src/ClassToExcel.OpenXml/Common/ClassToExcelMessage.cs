@@ -3,6 +3,14 @@
     public class ClassToExcelMessage
     {
         public ClassToExcelMessage(ClassToExcelMessageType messageType, string message) : this(messageType, 0, null, message){}
+        public ClassToExcelMessage(ClassToExcelMessageType messageType, int rowNumber, string columnName, string columnLetter, string message)
+        {
+            RowNumber = rowNumber;
+            ColumnName = columnName;
+            ColumnLetter = columnLetter;
+            Message = message;
+            MessageType = messageType;
+        }
         public ClassToExcelMessage(ClassToExcelMessageType messageType, int rowNumber, ClassToExcelColumn column, string message)
         {
             RowNumber = rowNumber;

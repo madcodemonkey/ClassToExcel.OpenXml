@@ -79,15 +79,15 @@ namespace ClassToExcel
                 var rows = theWorksheet.Descendants<Row>();
 
                 //Loop through the Worksheet rows.
-                int rowIndex = 0;
+                int rowNumber = 0;
                 foreach (Row oneRow in rows)
                 {
-                    rowIndex++;
-                    if (startRow.HasValue && startRow.Value > rowIndex)
+                    rowNumber++;
+                    if (startRow.HasValue && startRow.Value > rowNumber)
                         continue;
 
                     //Add rows to DataTable.
-                    var newRow = new ClassToExcelRawRow {RowIndex = rowIndex};
+                    var newRow = new ClassToExcelRawRow {RowNumber= rowNumber};
 
                     foreach (Cell oneCell in oneRow.Elements<Cell>())
                     {
@@ -99,7 +99,7 @@ namespace ClassToExcel
 
                     result.Add(newRow);
 
-                    if (endRow.HasValue && endRow.Value == rowIndex)
+                    if (endRow.HasValue && endRow.Value == rowNumber)
                         break;
                 }
             }
