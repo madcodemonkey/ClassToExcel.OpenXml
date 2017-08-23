@@ -6,15 +6,12 @@ Notes
 * Requires the use of Microsoft's OpenXML library:  DocumentFormat.OpenXML
 
 ---
----
 # ClassToExcelWriterService and ClassToExcelReaderService
-The ClassToExcelWriterService service can be used to turn a List\<T\> into an Excel spreadsheet where each class represents a row and certain properties on the class are mapped to columns in the Excel spreadsheet. The ClassToExcelReaderService service can be used to do the reverse action.  It takes each row in the Excel spreadsheet and maps the columnd to properties on a class which results in a List\<T\>.
+The ClassToExcelWriterService service can be used to turn a List\<T\> into an Excel spreadsheet where each class represents a row and certain properties on the class are mapped to columns in the Excel spreadsheet. The ClassToExcelReaderService service can be used to do the reverse action.  It takes each row in the Excel spreadsheet and maps the columns to properties on a class which results in a List\<T\>.
 
----
 ## Step 1: Create instructions
 Create a class that will hold your data.
 
----
 ## Step 2: Decorate instructions
 Decorate the properties with the ClassToExcelAttribute. The ClassToExcelAttribute has the following properties:
 * ColumnName - This is used when reading or writing files where a header row is present.
@@ -91,7 +88,7 @@ Other examples that work with Excel
 * mm/dd/yy
 * _($* #,##0.00_);_($* (#,##0.00);_($* "" - ""??_);_(@_)   
 
----
+
 ## Step 3a: Write instructions
 Create a ClassToExcelWriterService object, add your worksheet data (list of instantiated objects from step 1) 
 and then save it as a file or request the data in a MemoryStream.
@@ -129,7 +126,7 @@ Notes
 Disposing of the writer will clean up OpenXML SpreadsheetDocument and other objects. 
 * Objects and arrays will NOT be written to the file.
 
----
+
 ## Step 3b: Read instructions
 Create a ClassToExcelReaderService object specifying the class that will be used.  Call ReadWorksheet with an 
 input (file path, stream or byte array), the name of the tab/worksheet, and specify if the first row is a header row 
