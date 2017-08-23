@@ -8,7 +8,7 @@ Notes
 ---
 ---
 # ClassToExcelWriterService and ClassToExcelReaderService
-The ClassToExcelWriterService service can be used to turn a List<T> into an Excel spreadsheet where each class represents a row and certain properties on the class are mapped to columns in the Excel spreadsheet. The ClassToExcelReaderService service can be used to do the reverse action.  It takes each row in the Excel spreadsheet and maps the columnd to properties on a class which results in a List<T>.
+The ClassToExcelWriterService service can be used to turn a List\<T\> into an Excel spreadsheet where each class represents a row and certain properties on the class are mapped to columns in the Excel spreadsheet. The ClassToExcelReaderService service can be used to do the reverse action.  It takes each row in the Excel spreadsheet and maps the columnd to properties on a class which results in a List\<T\>.
 
 ---
 ## Step 1: Create instructions
@@ -66,8 +66,8 @@ Here is a list of built in style format supported by Excel:
 * 0%
 * 0.00%
 * 0.00E+00
-* # ?/?
-* # ??/??
+* \# ?/?
+* \# ??/??
 * d/m/yyyy
 * d-mmm-yy
 * d-mmm
