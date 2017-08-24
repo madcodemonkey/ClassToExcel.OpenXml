@@ -178,6 +178,7 @@ The column object contains the column letter and the data in the column represen
 In other words, things like dates will come out as numbers, which is how they are represented behind the scene.  
 * If you need to convert dates from this number format into a real date, you can use  DateTime.FromOADate(someNumber) to convert it.
 * ClassToExcelWriterService is disposable, but the ClassToExcelRawReaderService is not.
+* Sometimes the OpenXML framework will remove a blank line and other times it will not (perhaps there is space or something that it recognizes).
 
 
 ---
@@ -186,7 +187,8 @@ In other words, things like dates will come out as numbers, which is how they ar
 This coverter can be used in conjunction with the ClassToExcelRawReaderService and the ClassToExcelRowAttribute to map several rows onto a single class.  I don't expect this to be used very often, but there are a few edge cases where I needed to do somethhing like read rows 1 - 4 to one class and 5 - 8 to another.
 
 ## Step 1 
-Run the example and do a Raw read to see how the data is going to look and take note that blank lines are eliminated by the OpenXML framework.
+Run the example and do a Raw read to see how the data is going to look.  
+
 ```
 Row: 1 --> [Column: A Data: Beverages][Column: B Data: Column1][Column: C Data: Quantity]
 Row: 2 --> [Column: A Data: Beer][Column: C Data: 1]
@@ -198,6 +200,9 @@ Row: 7 --> [Column: A Data: Dates][Column: B Data: Start Date][Column: C Data: E
 Row: 8 --> [Column: A Data: Beer availability date][Column: B Data: 41883][Column: C Data: 41896]
 Row: 9 --> [Column: A Data: Wine availability date][Column: B Data: 42798][Column: C Data: 42827]
 ```
+
+Notes
+* SOMETIMES blank lines are eliminated by the OpenXML framework.  This can make this type of parsing very fragile!!!  In these cases, I usually read a label or some other addition text from a different column to  double check that I'm reading from the proper location.
 
 ## Step 2
 Create your classes and decorate it with them ClassToExcelRowAttribute.

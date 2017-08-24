@@ -179,6 +179,48 @@ namespace ClassToExcel.Tests.Converters
         #endregion
 
 
+        #region DateTime and DateTime?
+        [TestMethod]
+        public void DateTime_CanAssignValues_ValuesAssigned()
+        {
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Good, "SomeDateTime", new DateTime(2014, 9, 1), "41883");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Good, "SomeDateTime", new DateTime(2014, 11, 1), "41944");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Good, "SomeDateTime", new DateTime(2016, 11, 1), "42675");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Good, "SomeDateTime", new DateTime(2017, 6, 14), "42900");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Good, "SomeDateTime", new DateTime(2017, 6, 15), "42901");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Default, "SomeDateTime", DateTime.MinValue, "");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Default, "SomeDateTime", DateTime.MinValue, String.Empty);
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Default, "SomeDateTime", DateTime.MinValue, null);
+        }
+
+        [TestMethod]
+        public void DateTime_CanHandleNonIntegerStrings_ErrorReturnedAndZeroIsDefault()
+        {
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Error, "SomeDateTime", DateTime.MinValue, "abc");
+            PropertyTester<DateTime>(StringToPropertyConverterEnum.Error, "SomeDateTime", DateTime.MinValue, "5488e4$#@#");
+        }
+
+        [TestMethod]
+        public void NullableDateTime_CanAssignValues_ValuesAssigned()
+        {
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Good, "SomeNullableDateTime", new DateTime(2014, 9, 1), "41883");
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Good, "SomeNullableDateTime", new DateTime(2014, 11, 1), "41944");
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Good, "SomeNullableDateTime", new DateTime(2016, 11, 1), "42675");
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Good, "SomeNullableDateTime", new DateTime(2017, 6, 14), "42900");
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Good, "SomeNullableDateTime", new DateTime(2017, 6, 15), "42901");
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Default, "SomeNullableDateTime", null, "");
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Default, "SomeNullableDateTime", null, String.Empty);
+            PropertyTester<DateTime?>(StringToPropertyConverterEnum.Default, "SomeNullableDateTime", null, null);
+        }
+
+        [TestMethod]
+        public void NullableDateTime_CanHandleNonIntegerStrings_ErrorReturnedAndNullIsDefault()
+        {
+            PropertyTester<int?>(StringToPropertyConverterEnum.Error, "SomeNullableDateTime", null, "abc");
+            PropertyTester<int?>(StringToPropertyConverterEnum.Error, "SomeNullableDateTime", null, "5488e4$#@#");
+        }
+        #endregion
+
         public class StringPropertTesting
         {
             public string SomeString { get; set; }
@@ -190,6 +232,10 @@ namespace ClassToExcel.Tests.Converters
             public decimal? SomeNullableDecimal { get; set; }
             public bool SomeBoolean { get; set; }
             public bool? SomeNullableBoolean { get; set; }
+            
+            public DateTime SomeDateTime { get; set; }
+            public DateTime? SomeNullableDateTime { get; set; }
+
         }
 
         private void PropertyTester<T>(StringToPropertyConverterEnum expectedStatus, string propertyName, T expectedValue, string stringInputValue)

@@ -100,7 +100,7 @@ namespace ClassToExcel
                 return StringToPropertyConverterEnum.Good;
             }
 
-            LastMessage = $"Could not parse '{stringValue}' as an DateTime!";
+            LastMessage = $"Could not parse '{stringValue}' as a DateTime!";
             return StringToPropertyConverterEnum.Error;
         }
 
