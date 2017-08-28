@@ -73,6 +73,13 @@ namespace ClassToExcel.Tests.Converters
         }
 
         [TestMethod]
+        public void Double_CanRoundToGivenPrecision_NumberRoundedProperly()
+        {
+            PropertyTester<double>(StringToPropertyConverterEnum.Good, "SomeDouble", 48.58, "48.5750001", 2);
+            PropertyTester<double>(StringToPropertyConverterEnum.Good, "SomeDouble", 48.57, "48.5749999", 2);
+        }
+
+        [TestMethod]
         public void NullableDouble_CanAssignValues_ValuesAssigned()
         {
             PropertyTester<double?>(StringToPropertyConverterEnum.Good, "SomeNullableDouble", 12345.254, "12345.254");
@@ -100,6 +107,16 @@ namespace ClassToExcel.Tests.Converters
             PropertyTester<decimal>(StringToPropertyConverterEnum.Default, "SomeDecimal", 0.0m, String.Empty);
             PropertyTester<decimal>(StringToPropertyConverterEnum.Default, "SomeDecimal", 0.0m, null);
         }
+
+        [TestMethod]
+        public void Decimal_CanRoundToGivenPrecision_NumberRoundedProperly()
+        {
+            PropertyTester<decimal>(StringToPropertyConverterEnum.Good, "SomeDecimal", 58.58m, "58.5750001", 2);
+            PropertyTester<decimal>(StringToPropertyConverterEnum.Good, "SomeDecimal", 58.57m, "58.5749999", 2);
+            PropertyTester<decimal>(StringToPropertyConverterEnum.Good, "SomeDecimal", 58.6m, "58.5749999", 1);
+            PropertyTester<decimal>(StringToPropertyConverterEnum.Good, "SomeDecimal", 59.0m, "58.5749999", 0);
+        }
+
 
         [TestMethod]
         public void Decimal_CanHandleNonIntegerStrings_ErrorReturnedAndZeroIsDefault()
@@ -238,7 +255,7 @@ namespace ClassToExcel.Tests.Converters
 
         }
 
-        private void PropertyTester<T>(StringToPropertyConverterEnum expectedStatus, string propertyName, T expectedValue, string stringInputValue)
+        private void PropertyTester<T>(StringToPropertyConverterEnum expectedStatus, string propertyName, T expectedValue, string stringInputValue, int decimalPlaces = -1)
         {
             // Arrange
             PropertyInfo propertyInfo = typeof(StringPropertTesting).GetProperties().FirstOrDefault(w => w.Name == propertyName);
@@ -248,7 +265,7 @@ namespace ClassToExcel.Tests.Converters
             StringToPropertyConverter<StringPropertTesting> converter = new StringToPropertyConverter<StringPropertTesting>();
 
             // Act
-            StringToPropertyConverterEnum actualStatus = converter.AssignValue(propertyInfo, dataObject, stringInputValue);
+            StringToPropertyConverterEnum actualStatus = converter.AssignValue(propertyInfo, dataObject, stringInputValue, decimalPlaces);
 
             // Assert
             Assert.AreEqual(expectedStatus, actualStatus);

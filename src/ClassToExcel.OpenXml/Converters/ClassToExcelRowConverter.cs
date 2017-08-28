@@ -39,7 +39,7 @@ namespace ClassToExcel
                     continue;
                 }
 
-                var convertResult = _stringToPropertyConverter.AssignValue(item.Property, result, column.Data);
+                var convertResult = _stringToPropertyConverter.AssignValue(item.Property, result, column.Data, item.DecimalPlaces);
 
                 if (convertResult == StringToPropertyConverterEnum.Error || convertResult == StringToPropertyConverterEnum.Warning)
                 {
@@ -59,7 +59,7 @@ namespace ClassToExcel
 
             List<ClassToExcelRowConverterPropertyData> columns = new List<ClassToExcelRowConverterPropertyData>();
 
-            foreach (PropertyInfo property in typeOfClass.GetProperties())
+            foreach (PropertyInfo property in typeOfClass.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
             {
                 if ((property.PropertyType != typeof(string) && property.PropertyType.IsClass) || property.PropertyType.IsArray)
                     continue;
@@ -74,7 +74,13 @@ namespace ClassToExcel
                 ClassToExcelRowAttribute displayAttribute = firstAttribute as ClassToExcelRowAttribute;
                 if (displayAttribute != null)
                 {
-                    var newData = new ClassToExcelRowConverterPropertyData { Property = property, RowNumber = displayAttribute.RowNumber, ColumnLetter = displayAttribute.ColumnLetter };
+                    var newData = new ClassToExcelRowConverterPropertyData
+                    {
+                        Property = property,
+                        RowNumber = displayAttribute.RowNumber,
+                        ColumnLetter = displayAttribute.ColumnLetter,
+                        DecimalPlaces = displayAttribute.DecimalPlaces
+                    };
                     columns.Add(newData);
                 }
             }

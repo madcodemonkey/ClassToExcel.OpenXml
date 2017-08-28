@@ -18,7 +18,8 @@ namespace ClassToExcel
         /// <param name="property">Property information.  It will be used to determine the type and then assign the value to the object</param>
         /// <param name="obj">The object that will will receive the assignment.</param>
         /// <param name="stringValue">Value to assign to the property</param>
-        public StringToPropertyConverterEnum AssignValue(PropertyInfo property, T obj, string stringValue)
+        /// <param name="decimalPlaces">Number of decimal places of precision desired for doubles and decimals</param>
+        public StringToPropertyConverterEnum AssignValue(PropertyInfo property, T obj, string stringValue, int decimalPlaces = -1)
         {
             if (property == null)
                 throw new ArgumentException("You must specify a property information!");
@@ -44,10 +45,10 @@ namespace ClassToExcel
               return AssignIntValue(property, obj, stringValue);
 
             if (property.PropertyType == typeof(double) || property.PropertyType == typeof(double?))
-                return AssignDoubleValue(property, obj, stringValue);
+                return AssignDoubleValue(property, obj, stringValue, decimalPlaces);
 
             if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
-                return AssignDecimalValue(property, obj, stringValue);
+                return AssignDecimalValue(property, obj, stringValue, decimalPlaces);
 
             if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
                 return AssignBoolValue(property, obj, stringValue);
@@ -104,16 +105,20 @@ namespace ClassToExcel
             return StringToPropertyConverterEnum.Error;
         }
 
-        private StringToPropertyConverterEnum AssignDecimalValue(PropertyInfo property, T obj, string stringValue)
+        private StringToPropertyConverterEnum AssignDecimalValue(PropertyInfo property, T obj, string stringValue, int decimalPlaces)
         {
             if (string.IsNullOrWhiteSpace(stringValue))
                 return StringToPropertyConverterEnum.Default;
 
 
-            decimal number;
             // NumberStyles.Float used to allow parse to deal with exponents
-            if (decimal.TryParse(stringValue, NumberStyles.Float, null, out number))
+            if (decimal.TryParse(stringValue, NumberStyles.Float, null, out var number))
             {
+                if (decimalPlaces > -1)
+                {
+                    number =  Math.Round(number, decimalPlaces);
+                }
+
                 property.SetValue(obj, number, null);
                 return StringToPropertyConverterEnum.Good;
             }
@@ -127,10 +132,10 @@ namespace ClassToExcel
                 return StringToPropertyConverterEnum.Error;
             }
 
-            return AssignDecimalValue(property, obj, convertSpecialStrings);
+            return AssignDecimalValue(property, obj, convertSpecialStrings, decimalPlaces);
         }
 
-        private StringToPropertyConverterEnum AssignDoubleValue(PropertyInfo property, T obj, string stringValue)
+        private StringToPropertyConverterEnum AssignDoubleValue(PropertyInfo property, T obj, string stringValue, int decimalPlaces)
         {
             if (string.IsNullOrWhiteSpace(stringValue))
                 return StringToPropertyConverterEnum.Default;
@@ -139,6 +144,11 @@ namespace ClassToExcel
             // NumberStyles.Float used to allow parse to deal with exponents
             if (double.TryParse(stringValue, NumberStyles.Float, null, out number))
             {
+                if (decimalPlaces > -1)
+                {
+                    number = Math.Round(number, decimalPlaces);
+                }
+
                 property.SetValue(obj, number, null);
                 return StringToPropertyConverterEnum.Good;  
             }
@@ -152,7 +162,7 @@ namespace ClassToExcel
                 return StringToPropertyConverterEnum.Error;
             }
 
-            return AssignDoubleValue(property, obj, convertSpecialStrings);
+            return AssignDoubleValue(property, obj, convertSpecialStrings, decimalPlaces);
         }
 
         private StringToPropertyConverterEnum AssignIntValue(PropertyInfo property, T obj, string stringValue)

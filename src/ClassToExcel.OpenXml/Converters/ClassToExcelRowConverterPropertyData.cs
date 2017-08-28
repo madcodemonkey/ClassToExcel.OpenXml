@@ -9,5 +9,8 @@ namespace ClassToExcel
 
         /// <summary>The row number that should be used.</summary>
         public int RowNumber { get; set; }
+
+        /// <summary>For doubles and decimals, the degree of precision.</summary>
+        public int DecimalPlaces { get; set; }
     }
 }
