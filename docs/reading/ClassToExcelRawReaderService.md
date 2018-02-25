@@ -1,0 +1,80 @@
+# ClassToExcelRawReaderService
+
+Reads everything as a string with no coversion at all.  Keep in mind that Excel does NOT require  that BLANK cells be written so rows will not always have every column in the Excel data!
+
+Here is the code from the C# example program that does a raw read:
+```c#
+// NOTE 1 (see below)  
+// Passing in LogServiceMessage in optional.  I'm using it here to help debug in issues while reading a file.
+var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
+
+// Get tab names
+List<string> worksheetNames = string.IsNullOrWhiteSpace(WorksheetNames.Text)
+    ? new List<string>()
+    : WorksheetNames.Text.Split(',').ToList();
+
+if (worksheetNames.Count > 0)
+{
+    foreach (string worksheetName in worksheetNames)
+    {
+        // NOTE 2 (see below)  
+        List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet(filePath, worksheetName.Trim());
+        if (rawRows.Count > 0)
+        {
+            LogMessage($"Work sheet name: {worksheetName}");
+
+            foreach (var row in rawRows)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("Row: {0} --> ", row.RowNumber);
+                foreach (var column in row.Columns)
+                {
+                    sb.AppendFormat("[Column: {0} Data: {1}]", column.ColumnLetter, column.Data);
+                }
+
+                // NOTE 3 (see below)  
+                LogMessage(sb.ToString());
+            }
+        }
+        else LogMessage($"No data found on work sheet named: {worksheetName}");
+
+        LogMessage("----------------------------------");
+    }
+}
+else LogMessage("No work sheet (tab) names specified.");
+```
+
+Notes
+1. First create an instance of ClassToExcelRawReaderService
+2. In a loop we read each worksheet with this line:  List<ClassToExcelRawRow> rawRows = rawReaderService.ReadWorksheet(filePath, worksheetName.Trim());
+3. Next we write the content to the log so that you can see the raw data.  See the definition of ClassToExcelRawRow below.
+
+ClassToExcelRawRow looks like this:
+```c#
+public class ClassToExcelRawRow
+{
+    private int _rowNumber;
+
+    public ClassToExcelRawRow()
+    {
+        Columns = new List<ClassToExcelRawColumn>();
+    }
+
+    /// <summary>Row Number (1 based)</summary>
+    public int RowNumber
+    {
+        get { return _rowNumber; }
+        set { _rowNumber = value; }
+    }
+
+
+    [Obsolete("Use RowNumber instead.")]
+    public int RowIndex
+    {
+        get { return _rowNumber; }
+        set { _rowNumber = value; }
+    }
+
+    public List<ClassToExcelRawColumn> Columns { get; set; }
+}
+```
