@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="../css/shop-item.css" rel="stylesheet">
+
+    <title>ClassToExcel Documentation</title>
+</head>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">ClassToExcel Documentation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.htm">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="./reading/Reading.htm">Reading
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../writing/Writing.htm">Writing</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row margin-bottom-5">
+        <div class="col-lg-12">
+
+            <div class="card my-4">
+                <div class="card-header">ClassToExcelReaderService</div>
+                <div class="card-body">
+                    The ClassToExcelReaderService service convert Excel rows into class instances. It takes each row in the Excel spreadsheet
+                    and maps the columns to properties on a class which results in a List&lt;T&gt;.
+                </div>
+            </div>
+            <!-- /.card -->
+
+            <div id="accordion" class="my-4">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Step 1: Create a class
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                        <div class="card-body">
+                            Create a class that will hold your data.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Step 2: Decorate instructions
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+                        <div class="card-body">
+                            Decorate the properties with the ClassToExcelAttribute. The ClassToExcelAttribute has the following properties:
+                            <ul>
+                                <li>ColumnName - This is used when reading or writing files where a header row is present.</li>
+                                <li>Order - I highly recommend specifying the Order. When writing, it specifies the order that
+                                    the column is written to the file (i.e., The property marked with Order = 1 would be
+                                    in Column A, etc.). If you do not specify order when writing a file, the data will written
+                                    alphabetically using ColumnName, if specified, or property name. When reading files,
+                                    Order is used if you specify that no header column is present in the file. Again, if
+                                    order isn't specified, the properties are sorted by ColunName, if specified, or property
+                                    name and then read in that order.</li>
+                                <li>SyleFormat - This is used only when writing files. It is used to style the column in the
+                                    spreadsheet.
+                                </li>
+                                <li>Ignore - This is used when reading or writing files. It means you don't want data read into
+                                    the property and you don't want it written to the file.</li>
+                                <li>IsOptional - This is used only when reading files. It is an optional property. If specified,
+                                    we will not report this as a missing header column if you don't find it in the Excel
+                                    file. If you aren't listening for messages when reading data or your data has no header
+                                    row, you don't need to use this at all.</li>
+                            </ul>
+
+                            Here is an example:
+                            <pre>            
+public class Chicken
+{
+    public Chicken()
+    {
+        Owner = new Person { FirstName = "Farmer", LastName = "Brown", Age = 56};
+    }
+
+    [ClassToExcel(ColumnName = "Bird Name", Order = 1)]
+    public string Name { get; set; }
+
+    [ClassToExcel(Order = 2)]
+    public int Age { get; set; }
+
+    [ClassToExcel(ColumnName = "Date of Birth", Order = 3)]
+    public DateTime DOB { get; set; }
+
+    [ClassToExcel(StyleFormat = "$ #,###0.00", Order = 4)]
+    public decimal Value { get; set; }
+
+    [ClassToExcel(ColumnName = "Size of pen (sq. ft.)", StyleFormat = "#,###0", Order = 5)]
+    public int SizeOfPenInSquareFeet { get; set; }
+        
+    /// &lt;summary&gt;Will be ignored.&lt;/summary&gt;
+    public Person Owner { get; set; }
+}
+</pre> Here is a list of built in style format supported by Excel:
+                            <ul>
+                                <li>General</li>
+                                <li>0</li>
+                                <li>0.00</li>
+                                <li>#,##0</li>
+                                <li>#,##0.00</li>
+                                <li>0%</li>
+                                <li>0.00%</li>
+                                <li>0.00E+00</li>
+                                <li># ?/?</li>
+                                <li># ??/??</li>
+                                <li>d/m/yyyy</li>
+                                <li>d-mmm-yy</li>
+                                <li>d-mmm</li>
+                                <li>mmm-yy</li>
+                                <li>h:mm tt</li>
+                                <li>h:mm:ss tt</li>
+                                <li>H:mm</li>
+                                <li>H:mm:ss</li>
+                                <li>m/d/yyyy H:mm</li>
+                                <li>#,##0 ;(#,##0)</li>
+                                <li>#,##0 ;[Red](#,##0)</li>
+                                <li>#,##0.00;(#,##0.00)</li>
+                                <li>#,##0.00;[Red](#,##0.00)</li>
+                                <li>mm:ss</li>
+                                <li>[h]:mm:ss</li>
+                                <li>mmss.0</li>
+                                <li>##0.0E+0</li>
+                                <li>@</li>
+                            </ul>
+                            Other examples that work with Excel
+                            <ul>
+                                <li>mm/dd/yy</li>
+                                <li>($* #,##0.00_);($* (#,##0.00);($* "" - ""??);(@)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Step 3: Read instructions
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+                        <div class="card-body">
+                            Create a ClassToExcelReaderService object specifying the class that will be used. Call ReadWorksheet with an input (file
+                            path, stream or byte array), the name of the tab/worksheet, and specify if the first row is a
+                            header row (warning, if you say "no" the Order attribute will be used to find data if order is
+                            not specified on the class alphabetical order by ColumnName \[property name if ColumnName not
+                            specified\] will be assumed and data may be mapped incorrectly).
+
+<pre>
+
+// File example
+var readerService = new ClassToExcelReaderService&lt;Person&gt;();
+List&lt;Person&gt; people = readerService.ReadWorksheet("c:\\temp\\Example1.xlsx", "People", true);
+</pre> 
+                                Notes
+                            <ul>
+                                <li>ClassToExcelWriterService is disposable, but the ClassToExcelReaderService is not.</li>
+                                <li>If you pass in a stream, you still have dispose of it yourself.</li>
+                                <li>Objects and Arrays will be IGNORED on the class you created in Step 1.</li>
+                                <li>This code uses reflection, so it can set a value on a private setter in the class you created
+                                    in Step 1.</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-9 -->
+
+    </div>
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-5 bg-dark padding-top-5">
+    <div class="container">
+        <p class="m-0 text-center text-white">Licensed under GNU GENERAL PUBLIC LICENSE Version 3, June 29th 2007</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
