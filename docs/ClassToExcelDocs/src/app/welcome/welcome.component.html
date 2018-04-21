@@ -1,0 +1,66 @@
+<div class="container">
+
+  <div class="row margin-bottom-5">
+    <div class="col-lg-12">
+      
+      <div class="card my-4">
+        <div class="card-body">
+          <h3 class="card-title">ClassToExcel Documentation</h3>
+          <p class="card-text">A simple .NET library for writing and reading Excel worksheets using a List of T as the input or received output
+            of the operation.</p>
+          Notes:
+          <ul>
+            <li>Since these reading and writing classes are performing operations in memory, I do NOT recommend using this code
+              to produce large Excel files with lots of rows.</li>
+            <li>Requires the use of Microsoft's OpenXML library: DocumentFormat.OpenXML</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="card card-outline-secondary my-4">
+        <div class="card-header">
+          Commonly used services
+        </div>
+        <div class="card-body">
+          Follow these links to learn more about services you'll <b>commonly</b> use:
+          <ul>
+            <li><a [routerLink]="['/reading/ClassToExcelReader']">Reading Excel files with ClassToExcelReaderService</a></li>
+            <li>
+              <a href="./writing/ClassToExcelWriterService.htm">Writing Excel files with ClassToExcelWriterService</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- /.card -->
+
+
+      <div class="card card-outline-secondary my-4">
+        <div class="card-header">
+          Rarely used services
+        </div>
+        <div class="card-body">
+          Follow these links to learn more about services you'll
+          <b>rarely</b> use:
+
+          <ul>
+              <li><a [routerLink]="['/reading/ClassToExcelRawReader']">Reading Excel files with the ClassToExcelRawReaderService</a>
+                - Reads everything as a string with no coversion at all. Keep in mind that Excel does NOT require that BLANK cells be written
+                so rows will not always have every column in the Excel data!</li>
+            <li>
+              <a href="./reading/ClassToExcelRowConverter.htm">Reading Excel files with the ClassToExcelRawReaderService and ClassToExcelRowConverter</a>
+              - The ClassToExcelRowConverter can be used in conjunction with the ClassToExcelRawReaderService and the ClassToExcelRowAttribute
+              to map several rows onto a single class. I don't expect this to be used very often, but there are a few edge
+              cases where I needed to do somethhing like read rows 1 - 4 to one class and rows 5 - 8 into another class.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- /.card -->
+
+    </div>
+    <!-- /.col-lg-9 -->
+
+  </div>
+
+</div>
+<!-- /.container -->

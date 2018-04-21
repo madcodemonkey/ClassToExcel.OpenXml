@@ -1,0 +1,26 @@
+public class ClassToExcelRawRow
+{
+    private int _rowNumber;
+
+    public ClassToExcelRawRow()
+    {
+        Columns = new List<ClassToExcelRawColumn>();
+    }
+
+    /// &lt;summary&gt;Row Number (1 based)&lt;/summary&gt;
+    public int RowNumber
+    {
+        get { return _rowNumber; }
+        set { _rowNumber = value; }
+    }
+
+
+    [Obsolete("Use RowNumber instead.")]
+    public int RowIndex
+    {
+        get { return _rowNumber; }
+        set { _rowNumber = value; }
+    }
+
+    public List<ClassToExcelRawColumn> Columns { get; set; }
+}

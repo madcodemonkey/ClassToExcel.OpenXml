@@ -1,0 +1,25 @@
+public class Chicken
+&#123;
+  public Chicken()
+  &#123;
+      Owner = new Person &#123; FirstName = "Farmer", LastName = "Brown", Age = 56};
+  &#125;
+
+  [ClassToExcel(ColumnName = "Bird Name", Order = 1)]
+  public string Name &#123; get; set; &#125;
+
+  [ClassToExcel(Order = 2)]
+  public int Age &#123; get; set; &#125;
+
+  [ClassToExcel(ColumnName = "Date of Birth", Order = 3)]
+  public DateTime DOB &#123; get; set; &#125;
+
+  [ClassToExcel(StyleFormat = "$ #,###0.00", Order = 4)]
+  public decimal Value &#123; get; set; &#125;
+
+  [ClassToExcel(ColumnName = "Size of pen (sq. ft.)", StyleFormat = "#,###0", Order = 5)]
+  public int SizeOfPenInSquareFeet &#123; get; set; &#125;
+      
+  /// &lt;summary&gt;Will be ignored.&lt;/summary&gt;
+  public Person Owner &#123; get; set; &#125;
+&#125;

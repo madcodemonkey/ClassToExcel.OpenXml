@@ -1,0 +1,16 @@
+
+Here is an example:
+public class Chicken
+&#123;
+    public Chicken()
+    &#123;
+        Owner = new Person &#123; FirstName = "Farmer", LastName = "Brown", Age = 56};
+    &#125;
+
+    public string Name &#123; get; set; &#125;
+    public int Age &#123; get; set; &#125;
+    public DateTime DOB &#123; get; set; &#125;
+    public decimal Value &#123; get; set; &#125;
+    public int SizeOfPenInSquareFeet &#123; get; set; &#125;
+    public Person Owner &#123; get; set; &#125;
+&#125;

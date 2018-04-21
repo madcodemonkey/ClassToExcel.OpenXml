@@ -1,0 +1,18 @@
+
+// Passing in LogServiceMessage is optional.  I'm using it here to help debug any issues while reading a file.
+var rawReaderService = new ClassToExcelRawReaderService(LogServiceMessage);
+List&lt;ClassToExcelRawRow&gt; rawRows = rawReaderService.ReadWorksheet("c:\\temp\\Example1.xlsx", "People");
+if (rawRows.Count > 0)
+{
+	foreach (var row in rawRows)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.AppendFormat("Row: {0} --> ", row.RowIndex);
+		foreach (var column in row.Columns)
+		{
+			sb.AppendFormat("[Column: {0} Data: {1}]", column.ColumnLetter, column.Data);
+		}
+		Console.WriteLine(sb.ToString());
+	}
+}
+else Console.WriteLine("No data found.");
