@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ReadingModule } from './reading/reading.module';
 import { WritingModule } from './writing/writing.module';
-import { ExampleService } from './example.service';
 
 
 @NgModule({
@@ -25,7 +24,7 @@ import { ExampleService } from './example.service';
     CommonModule,
     HttpClientModule 
   ],
-  providers: [ExampleService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

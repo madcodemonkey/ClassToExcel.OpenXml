@@ -1,0 +1,11 @@
+List<Chicken> chickens = new List<Chicken>();
+List<Person> people = new List<Person>();
+// ..... populate chickens and people with data......
+// File example
+// Passing in LogServiceMessage is optional.  I'm using it here to help debug any issues while writing a file.
+using (var writerService = new ClassToExcelWriterService(LogServiceMessage))
+{
+	writerService.AddWorksheet(people, "People", true);
+	writerService.AddWorksheet(chickens, "Chickens", true);
+	writerService.SaveToFile("c:\\temp\\Example1.xlsx");
+}

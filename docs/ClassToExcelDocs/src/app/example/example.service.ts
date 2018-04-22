@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ExampleService {
+
     // https://stackoverflow.com/questions/40424907/whats-the-default-path-for-static-files-in-angular2
     private _baseUrl = 'assets/examples/';
 
@@ -15,7 +16,7 @@ export class ExampleService {
 
     getExample(fileName: string): Observable<string> {
       return this._http.get(this._baseUrl + fileName, { responseType: 'text' })
-      .do(data => console.log('All: ' + data))
+     // .do(data => console.log('All: ' + data))
       .catch(this.handleError);
     }
 
@@ -34,5 +35,4 @@ export class ExampleService {
         console.error(errorMessage);
         return Observable.throw(errorMessage);
     }
-
 }

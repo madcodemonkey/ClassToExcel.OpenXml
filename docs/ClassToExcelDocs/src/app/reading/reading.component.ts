@@ -1,13 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({ 
   templateUrl: './reading.component.html'
 })
-export class ReadingComponent implements OnInit {
-
+export class ReadingComponent {
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

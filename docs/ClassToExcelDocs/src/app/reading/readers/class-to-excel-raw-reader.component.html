@@ -12,6 +12,9 @@
       </div>
 
       <div id="accordion" class="my-4">
+        <!-- Example #1 -->
+        <!-- Example #1 -->
+        <!-- Example #1 -->
         <div class="card">
           <div class="card-header" id="headingOne">
             <h5 class="mb-0">
@@ -24,7 +27,8 @@
           <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
                 Here is the code from the C# example program that does a raw read:
-                <pre [innerHtml]="example1CodePart1"></pre>
+                <cte-example fileName="RawReaderExample1Part1.txt"></cte-example>
+ 
                 Notes:
                 <ol>
                   <li>First create an instance of ClassToExcelRawReaderService</li>
@@ -41,10 +45,13 @@
                 </ul>
                 
                 ClassToExcelRawRow looks like this:
-                <pre [innerHtml]="example1CodePart2"></pre>
+                <cte-example fileName="RawReaderExample1Part2.txt"></cte-example>
             </div>
           </div>
         </div>
+        <!-- Example #2 -->
+        <!-- Example #2 -->
+        <!-- Example #2 -->
         <div class="card">
           <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
@@ -59,7 +66,7 @@
 
                 First, create an ClassToExcelRawReaderService object and then call the ReadWorksheet method with an input (file path, stream or byte array) and the name of the tab/worksheet.
 
-                <pre [innerHtml]="example2Code"></pre>
+                <cte-example fileName="RawReaderExample2.txt"></cte-example>
                 
                 Notes:
                 <ul>

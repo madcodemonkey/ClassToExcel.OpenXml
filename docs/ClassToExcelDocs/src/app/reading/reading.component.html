@@ -6,16 +6,15 @@
         <div class="card-body">
           <h3 class="card-title">Reading Topics</h3>
           <ul>
-            <li><a [routerLink]="['ClassToExcelReader']">Reading Excel files with ClassToExcelReaderService</a></li>
-            <li><a [routerLink]="['ClassToExcelRawReader']">Reading Excel files with the ClassToExcelRawReaderService</a>
+            <li><a routerLink="ClassToExcelReader">Reading Excel files with the ClassToExcelReaderService</a></li>
+            <li><a routerLink="ClassToExcelRawReader">Reading Excel files with the ClassToExcelRawReaderService</a>
               - Reads everything as a string with no coversion at all. Keep in mind that Excel does NOT require that BLANK cells be written
               so rows will not always have every column in the Excel data!</li>
-            <li><a href="./reading/ClassToExcelRowConverter.htm">Reading Excel files with the ClassToExcelRawReaderService and ClassToExcelRowConverter</a>
+            <li><a routerLink="ClassToExcelRowReader">Reading Excel files with ClassToExcelRawReaderService and ClassToExcelRowConverter</a>
               - The ClassToExcelRowConverter can be used in conjunction with the ClassToExcelRawReaderService and the ClassToExcelRowAttribute
               to map several rows onto a single class. I don't expect this to be used very often, but there are a few edge
-              cases where I needed to do somethhing like read rows 1 - 4 to one class and rows 5 - 8 into another class.</li>
-          </ul>
-          
+              cases where I needed to do somethhing like read rows 1 - 4 to one class and rows 5 - 8 into another class.</li>              
+          </ul>          
         </div>
       </div>
     </div>
