@@ -7,7 +7,7 @@ public class ClassToExcelRawRow
         Columns = new List<ClassToExcelRawColumn>();
     }
 
-    /// &lt;summary&gt;Row Number (1 based)&lt;/summary&gt;
+    /// <summary>Row Number (1 based)</summary>
     public int RowNumber
     {
         get { return _rowNumber; }

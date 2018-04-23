@@ -1,0 +1,28 @@
+// Row 1 is a header, so start on row 2
+public class Beverage
+{
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 2)]
+	public int Beer { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 3)]
+	public int Wine { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 4)]
+	public int Pepsi { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 5)]
+	public int Coke { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 6)]
+	public int DrPepper { get; set; }
+}
+
+// Row 7 is a header and the blank row between the data is eliminated by OpenXML framework.
+public class BeverageDates
+{
+	[ClassToExcelRow(ColumnLetter = "B", RowNumber = 8)]
+	public DateTime BeerStart { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 8)]
+	public DateTime BeerEnd { get; set; }
+
+	[ClassToExcelRow(ColumnLetter = "B", RowNumber = 9)]
+	public DateTime WineStart { get; set; }
+	[ClassToExcelRow(ColumnLetter = "C", RowNumber = 9)]
+	public DateTime WineEnd { get; set; }
+}

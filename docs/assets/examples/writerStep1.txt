@@ -1,5 +1,3 @@
-
-Here is an example:
 public class Chicken
 {
     public Chicken()
