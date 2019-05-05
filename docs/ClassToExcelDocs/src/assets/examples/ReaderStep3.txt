@@ -1,4 +1,0 @@
-
-// File example
-var readerService = new ClassToExcelReaderService<Person>();
-List<Person> people = readerService.ReadWorksheet("c:\\temp\\Example1.xlsx", "People", true);
